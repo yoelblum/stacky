@@ -1,0 +1,60 @@
+#google.charts.load('current', {'packages':['corechart']});
+#google.charts.setOnLoadCallback( -> drawChart);
+window.tag =
+  handleCheckbox: (c)->
+    console.log(@)
+    @drawChart()
+
+  drawChart: ->
+
+    scores = JSON.parse($("#chart_div").attr('data')).map((s)->
+      [new Date(s['year']).getTime(), s['score']]
+    )
+
+    @series = [{name: $('h1').first().text(), data: scores}]
+    self = @
+    $("input:checked").each( ->
+      console.log("what?", $(@))
+      data = JSON.parse($(@).attr('data'))
+      yearlyScores = data["yearly_scores"]
+      self.series = self.series.concat([{name: data["name"], data: yearlyScores.map((y)-> [new Date(y['year']).getTime(), y['score']])}])
+      console.log("here?", self.series)
+    )
+    Highcharts.chart('chart_div',
+      chart:
+        type: 'area'
+      title:
+        text: 'Stackoverflow Questions Per Year'
+      plotOptions:
+        area:
+          dataLabels:
+            enabled: true
+
+      yAxis:
+
+        labels:
+          items:
+            html: 'SSSSUppp'
+      xAxis:
+        type: 'datetime'
+        title:
+          text: 'Year'
+        dateTimeLabelFormats:
+          month: '%Y',
+          year: '%Y'
+
+
+      series: @series
+    )
+
+$ ->
+  document.addEventListener('turbolinks:load', (e)->
+
+    if $('#chart_div').length
+      setTimeout ->
+        window.tag.drawChart()
+      , 600
+  )
+
+
+

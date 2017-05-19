@@ -1,0 +1,27 @@
+<div class="tag-container">
+  <div class="row tag-header" >
+    <div class="col-md-8 col-md-push-2">
+      <h1><%= @tag.name %></h1>
+      <h3 class="tag-subtitle">Overall Ranking: <%= @rank %></h3>
+      <h3 class="tag-subtitle">Ranking in 2017: <%= @current_year_rank %></h3>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 col-md-push-2">
+      <div id="chart_div" data="<%= @yearly_scores %>"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="category-tags col-md-8 col-md-push-2">
+      <h3>Compare with others in category</h3>
+      <% @category_tags.each do |ys| %>
+          <input data="<%= ys.to_json %>"  type="checkbox" onchange="window.tag.handleCheckbox(this)" >
+          <span class="tag-name"><%= ys[:name] %></span>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
